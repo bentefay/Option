@@ -2,8 +2,12 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace Tests
 {
@@ -348,6 +352,25 @@ namespace Tests
             var aggr = dto
                 .Aggregate(TimeSpan.Zero, (ts, dt) => dt - now + ts);
             Assert.AreEqual(TimeSpan.FromHours(1), aggr);
+        }
+
+        [Test]
+        public void TestBinarySerialization()
+        {
+            const int value = 123;
+
+            var o1 = Option<int>.Some(value);
+           
+            var memoryStream = new MemoryStream();
+            var formatter = new BinaryFormatter();
+            formatter.Serialize(memoryStream, o1);
+
+            memoryStream.Flush();
+            memoryStream.Position = 0;
+
+            var o2 = (Option<int>)formatter.Deserialize(memoryStream);
+
+            Assert.AreEqual(value, o2.Value);
         }
 
         private static void TestIEnumerableHelper(Option<int> o)

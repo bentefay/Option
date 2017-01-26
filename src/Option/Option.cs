@@ -13,6 +13,7 @@ namespace Functional.Option
     /// </summary>
     /// <typeparam name="T">The type to create an option for.</typeparam>
     [DebuggerDisplay("HasValue = {_hasValue}, Value = {_value}")]
+    [Serializable]
     public struct Option<T> : IEquatable<Option<T>>, IEnumerable<T>
     {
         /// <summary>
