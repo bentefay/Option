@@ -4,6 +4,8 @@ Option
 What is it?
 -----------
 
+A fork of the fantastic [Option](https://github.com/tejacques/Option) library, upgraded to netstandard.
+
 An Option type for C#. Options are a well studied Functional paradigm that allows for the representation of not having a value (None) as well as having a value (Some). This allows for a clear differentiation between the two without the need for null values. Unlike [Optional](https://github.com/nlkl/Optional), this library enforces that Option _cannot_ contain `null`, and so it can support unambigious implicit casts from `T` to `Option<T>`.
 
 How can I get it?
