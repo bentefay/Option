@@ -4,7 +4,7 @@ Option
 What is it?
 -----------
 
-An Option type for C#. It allows you to clearly distinguish between having a value (`Some`) and __not__ having a value (`None`) without using null. 
+An Option type for C#. It allows you to clearly distinguish between having a value (`Some`) and __not__ having a value (`None`) without using `null`. 
 This can make your code clearer by flagging whether clients need to handle an empty result.
 The type also provides a set of powerful operations, providing more flexiblity than using the `Try` pattern. 
 
@@ -38,6 +38,19 @@ var option = Option.Create(x);
 var option = Option<int>.None;
 Option<int> option = x;
 Option<int> option = Option.None; // Implicit cast from Option.None to Option<int>.None
+```
+
+### Terse creation (no need to repeat types) ###
+
+```csharp
+public Option<string> Match(int x) {
+	if (x == 1)
+		return "one";
+	if (x == 2)
+		return "two";
+	else
+		return Option.None;
+}
 ```
 
 ### Check for equality ###
