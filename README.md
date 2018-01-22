@@ -44,12 +44,12 @@ Option<int> option = Option.None; // Implicit cast from Option.None to Option<in
 
 ```csharp
 public Option<string> Match(int x) {
-	if (x == 1)
-		return "one";
-	if (x == 2)
-		return "two";
-	else
-		return Option.None;
+  if (x == 1)
+    return "one";
+  if (x == 2)
+    return "two";
+  else
+    return Option.None;
 }
 ```
 
