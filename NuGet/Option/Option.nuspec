@@ -6,8 +6,8 @@
     <title>Option.Netstandard</title>
     <authors>Tom Jacques</authors>
     <owners>Tom Jacques</owners>
-    <licenseUrl>https://github.com/tejacques/Option/blob/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/tejacques/Option/</projectUrl>
+    <licenseUrl>https://github.com/bentefay/Option/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/bentefay/Option/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
         Binaries for the Option type.
