@@ -97,7 +97,7 @@ return option
     .Result(); // Also supports statements
 ```
 
-### LINQ ####
+#### LINQ ####
 
 ``` csharp
 Option<int> option = 1;
