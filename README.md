@@ -49,7 +49,7 @@ Option.Some(1) == Option.None  // => False
 Option.Empty == null  // => true
 ```
 
-### Access the option's value imperatively ###
+### Access the option imperatively ###
 ```csharp
 Option<int> option = 1;
 if (option.TryGetValue(out var value))
@@ -74,7 +74,9 @@ var v3 = option.ValueOr(() => 0); // Deferred factory method (if expensive)
 }
 ```
 
-### Transform the option functionally ###
+### Access and transform the option functionally ###
+
+#### Pattern matching ####
 
 ```csharp
 Option<int> option = 1;
@@ -94,6 +96,8 @@ return option
     .Some(value => value.ToString())
     .Result(); // Also supports statements
 ```
+
+### LINQ ####
 
 ``` csharp
 Option<int> option = 1;
