@@ -37,7 +37,7 @@ int? x = null;
 var option = Option.Create(x);
 var option = Option<int>.None;
 Option<int> option = x;
-Option<int> option = Option.None;
+Option<int> option = Option.None; // Implicit cast from Option.None to Option<int>.None
 ```
 
 ### Check for equality ###

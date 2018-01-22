@@ -1,13 +1,7 @@
 ﻿using Functional.Option;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Xml;
-using System.Xml.Serialization;
 
 namespace Tests
 {
@@ -17,7 +11,7 @@ namespace Tests
         [Test]
         public void TestCreate()
         {
-            string s = "string";
+            var s = "string";
             Option<string> option = s;
 
             Assert.IsTrue(option.HasValue);
@@ -28,43 +22,40 @@ namespace Tests
             Assert.IsFalse(objectOption.HasValue);
             Assert.IsTrue(Option.None == objectOption);
 
-            Assert.Throws<ArgumentNullException>(() => 
-                Option.Some<object>(null));
+            Assert.Throws<ArgumentNullException>(() => Option.Some<object>(null));
 
             Option<int> intoption = ((int?)null).ToOption();
             intoption = Option.Create((int?)null);
+            intoption = Option.Create<int>(null);
             intoption = Option.Create((int?)1);
             intoption = Option.Some((int?)1);
             intoption = Option.Some(1);
             intoption = 0.ToOption();
 
-            Assert.Throws<ArgumentNullException>(() =>
-                Option.Some((int?)null));
+            Assert.Throws<ArgumentNullException>(() => Option.Some<int>(null));
         }
 
         [Test]
         public void TestValue()
         {
             Option<object> objectOption = Option.None;
-            Assert.Throws(
-                typeof(InvalidOperationException),
-                () => { var v = objectOption.Value; });
+            Assert.Throws(typeof(InvalidOperationException), () => { var v = objectOption.Value; });
 
             object o = new object();
             objectOption = o;
             object o2 = objectOption;
+            Assert.AreEqual(o2, objectOption);
         }
 
         [Test]
         public void TestTryGetValue()
         {
             Option<object> objectOption = Option.None;
-            object o;
-            Assert.IsFalse(objectOption.TryGetValue(out o));
+            Assert.IsFalse(objectOption.TryGetValue(out _));
 
             objectOption = new object();
 
-            Assert.IsTrue(objectOption.TryGetValue(out o));
+            Assert.IsTrue(objectOption.TryGetValue(out _));
         }
 
         [Test]
@@ -73,7 +64,7 @@ namespace Tests
             Option<object> objectOption = Option.None;
             Assert.AreEqual(null, objectOption.ValueOrDefault);
 
-            object o = new object();
+            var o = new object();
             objectOption = o;
 
             Assert.AreEqual(o, objectOption.Value);
@@ -92,7 +83,7 @@ namespace Tests
             Assert.AreEqual(1, objectOption.ValueOr(1));
             Assert.AreEqual(1, objectOption.ValueOr(() => 1));
 
-            object o = new object();
+            var o = new object();
             objectOption = o;
 
             Assert.AreEqual(o, objectOption.ValueOr(1));
@@ -105,29 +96,29 @@ namespace Tests
             Option<int> optionNone = Option.None;
             Option<int> optionSome = 10;
 
-            bool matchedNone = false;
-            bool matchedSome = false;
+            var matchedNone = false;
+            var matchedSome = false;
 
-            Action resetMatchVars = () =>
+            void ResetMatchVars()
             {
                 matchedNone = false;
                 matchedSome = false;
-            };
+            }
 
-            Action noneAction = () => matchedNone = true;
-            Action<int> someAction = (x) => matchedSome = true;
+            void NoneAction() => matchedNone = true;
+            void SomeAction(int x) => matchedSome = true;
 
             optionSome.Match(
-                None: noneAction,
-                Some: someAction);
+                None: NoneAction,
+                Some: SomeAction);
             Assert.IsFalse(matchedNone);
             Assert.IsTrue(matchedSome);
 
-            resetMatchVars();
+            ResetMatchVars();
 
             optionNone.Match(
-                None: noneAction,
-                Some: someAction);
+                None: NoneAction,
+                Some: SomeAction);
             Assert.IsTrue(matchedNone);
             Assert.IsFalse(matchedSome);
         }
@@ -140,10 +131,10 @@ namespace Tests
 
             Assert.AreEqual(0, optionNone.Match(
                 None: () => 0,
-                Some: (x) => 1));
+                Some: x => 1));
             Assert.AreEqual(1, optionSome.Match(
                 None: () => 0,
-                Some: (x) => 1));
+                Some: x => 1));
         }
 
         [Test]
@@ -153,16 +144,16 @@ namespace Tests
             Option<int> optionSome = 10;
             Option<int> optionOne = 1;
 
-            bool matchedNone = false;
-            bool matchedSome = false;
-            bool matchedOne = false;
+            var matchedNone = false;
+            var matchedSome = false;
+            var matchedOne = false;
 
-            Action resetMatchVars = () =>
+            void ResetMatchVars()
             {
                 matchedNone = false;
                 matchedSome = false;
                 matchedOne = false;
-            };
+            }
 
             var staticMatcher = Option<int>.PatternMatch()
                 .None(() => matchedNone = true)
@@ -180,7 +171,7 @@ namespace Tests
             Assert.IsFalse(matchedSome);
             Assert.IsFalse(matchedOne);
 
-            resetMatchVars();
+            ResetMatchVars();
 
             staticMatcher.Result(null);
 
@@ -188,40 +179,37 @@ namespace Tests
             Assert.IsFalse(matchedSome);
             Assert.IsFalse(matchedOne);
 
-            resetMatchVars();
+            ResetMatchVars();
 
             matcher.Result();
             Assert.IsFalse(matchedNone);
             Assert.IsTrue(matchedSome);
             Assert.IsFalse(matchedOne);
 
-            resetMatchVars();
+            ResetMatchVars();
 
             matcher.Result(optionNone);
             Assert.IsTrue(matchedNone);
             Assert.IsFalse(matchedSome);
             Assert.IsFalse(matchedOne);
 
-            resetMatchVars();
+            ResetMatchVars();
 
             matcher.Result(optionSome);
             Assert.IsFalse(matchedNone);
             Assert.IsTrue(matchedSome);
             Assert.IsFalse(matchedOne);
 
-            resetMatchVars();
+            ResetMatchVars();
 
             matcher.Result(optionOne);
             Assert.IsFalse(matchedNone);
             Assert.IsFalse(matchedSome);
             Assert.IsTrue(matchedOne);
 
-            Assert.Throws(typeof(InvalidOperationException),
-                () => matcher.None(() => { }));
-            Assert.Throws(typeof(InvalidOperationException),
-                () => matcher.Some((x) => { }));
-            Assert.Throws(typeof(InvalidOperationException),
-                () => matcher.Some(1, () => { }));
+            Assert.Throws(typeof(InvalidOperationException), () => matcher.None(() => { }));
+            Assert.Throws(typeof(InvalidOperationException), () => matcher.Some((x) => { }));
+            Assert.Throws(typeof(InvalidOperationException), () => matcher.Some(1, () => { }));
         }
 
         [Test]
@@ -235,7 +223,7 @@ namespace Tests
 
             var matcher =  optionSome.Match<int>()
                 .None(() => 0)
-                .Some((x) => 1)
+                .Some(x => 1)
                 .Some(1, () => 2);
 
             Assert.AreEqual(default(int), staticMatcher.Result());
@@ -245,12 +233,9 @@ namespace Tests
             Assert.AreEqual(1, matcher.Result(optionSome));
             Assert.AreEqual(2, matcher.Result(optionOne));
 
-            Assert.Throws(typeof(InvalidOperationException),
-                () => matcher.None(() => 0));
-            Assert.Throws(typeof(InvalidOperationException),
-                () => matcher.Some((x) => 1));
-            Assert.Throws(typeof(InvalidOperationException),
-                () => matcher.Some(1, () => 2));
+            Assert.Throws(typeof(InvalidOperationException), () => matcher.None(() => 0));
+            Assert.Throws(typeof(InvalidOperationException), () => matcher.Some(x => 1));
+            Assert.Throws(typeof(InvalidOperationException), () => matcher.Some(1, () => 2));
         }
 
         [Test]
@@ -307,6 +292,8 @@ namespace Tests
             Assert.IsTrue(o != oDifferent);
             Assert.IsTrue(oNull != o);
             Assert.IsTrue(null != o);
+            Assert.IsTrue(oNull == null);
+            Assert.IsTrue(null == oNull);
             Assert.IsFalse(oNull != null);
             Assert.IsFalse(null != oNull);
         }
@@ -341,7 +328,7 @@ namespace Tests
             var now = DateTime.UtcNow;
             Option<DateTime> dto = now.AddHours(1);
 
-            Option<int>[] oarray = new Option<int>[] { 1 };
+            Option<int>[] oarray = { 1 };
 
             Assert.AreEqual(1, oarray.Flatten().Count());
 
@@ -352,25 +339,6 @@ namespace Tests
             var aggr = dto
                 .Aggregate(TimeSpan.Zero, (ts, dt) => dt - now + ts);
             Assert.AreEqual(TimeSpan.FromHours(1), aggr);
-        }
-
-        [Test]
-        public void TestBinarySerialization()
-        {
-            const int value = 123;
-
-            var o1 = Option<int>.Some(value);
-           
-            var memoryStream = new MemoryStream();
-            var formatter = new BinaryFormatter();
-            formatter.Serialize(memoryStream, o1);
-
-            memoryStream.Flush();
-            memoryStream.Position = 0;
-
-            var o2 = (Option<int>)formatter.Deserialize(memoryStream);
-
-            Assert.AreEqual(value, o2.Value);
         }
 
         private static void TestIEnumerableHelper(Option<int> o)
