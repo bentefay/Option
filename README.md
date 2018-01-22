@@ -8,7 +8,7 @@ An Option type for C#. It allows you to clearly distinguish between having a val
 This can make your code clearer by flagging whether clients need to handle an empty result.
 The type also provides a set of powerful operations, providing more flexiblity than using the `Try` pattern. 
 
-Unlike [Optional](https://github.com/nlkl/Optional), this library enforces that Option _cannot_ contain `null`, and `null` converts to `Option.None`.
+Unlike [Optional](https://github.com/nlkl/Optional), this library enforces that Option _cannot_ contain `null`. Instead, `null` is equivalent to `Option.None`.
 As a result, this library supports unambigious implicit casts from `T`, `null` and `Option.None` to `Option<T>`.
 
 This is a fork of the fantastic [Option](https://github.com/tejacques/Option) library, upgraded to netstandard.
