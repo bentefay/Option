@@ -4,7 +4,7 @@ Option
 What is it?
 -----------
 
-An Option type for C#. It allows you to clearly distinguish between having a value (`Some`) and not having a value (`None`) without using null. 
+An Option type for C#. It allows you to clearly distinguish between having a value (`Some`) and __not__ having a value (`None`) without using null. 
 This can make your code clearer by flagging whether clients need to handle an empty result.
 The type also provides a set of powerful operations, providing more flexiblity than using the `Try` pattern. 
 
