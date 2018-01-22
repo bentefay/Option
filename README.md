@@ -4,14 +4,14 @@ Option
 What is it?
 -----------
 
-A fork of the fantastic [Option](https://github.com/tejacques/Option) library, upgraded to netstandard.
-
 An Option type for C#. It allows you to clearly distinguish between having a value (`Some`) and not having a value (`None`) without using null. 
 This can make your APIs much more intuitive by flagging whether clients need to handle an empty result.
 It also provides a set of powerful operations to simplify interaction with optional values, which can be more flexible than using the `Try` pattern. 
 
 Unlike [Optional](https://github.com/nlkl/Optional), this library enforces that Option _cannot_ contain `null`, and `null` converts to `Option.None`.
 As a result, this library supports unambigious implicit casts from `T`, `null` and `Option.None` to `Option<T>`.
+
+This is a fork of the fantastic [Option](https://github.com/tejacques/Option) library, upgraded to netstandard.
 
 How can I get it?
 -----------------
