@@ -43,7 +43,8 @@ Option<int> option = Option.None; // Implicit cast from Option.None to Option<in
 ### Terse creation (no need to repeat types) ###
 
 ```csharp
-public Option<string> Match(int x) {
+public Option<string> Match(int x) 
+{
   if (x == 1)
     return "one";
   if (x == 2)
