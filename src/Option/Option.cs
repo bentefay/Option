@@ -12,20 +12,13 @@ namespace Functional.Option
     /// between an intentionally set value, and a default value of None.
     /// </summary>
     /// <typeparam name="T">The type to create an option for.</typeparam>
-    [DebuggerDisplay("HasValue = {_hasValue}, Value = {_value}")]
+    [DebuggerDisplay("HasValue = {HasValue}, Value = {_value}")]
     public struct Option<T> : IEquatable<Option<T>>, IEnumerable<T>
     {
         /// <summary>
         /// The value of the option.
         /// </summary>
         private readonly T _value;
-
-        /// <summary>
-        /// The bool indicating whether the option has a value.
-        /// </summary>
-        private readonly bool _hasValue;
-
-        private static readonly Option<T> _none = new Option<T>();
 
         /// <summary>
         /// Creates a new option from a specified value.
@@ -43,12 +36,12 @@ namespace Functional.Option
         /// <summary>
         /// The Option indication there is no value.
         /// </summary>
-        public static Option<T> None => _none;
+        public static Option<T> None { get; } = new Option<T>();
 
         /// <summary>
         /// True if the option has a value, false otherwise.
         /// </summary>
-        public bool HasValue => _hasValue;
+        public bool HasValue { get; }
 
         /// <summary>
         /// Gets the value of the option
@@ -74,7 +67,7 @@ namespace Functional.Option
         /// Gets the value of the option if present,
         /// and the default value otherwise.
         /// </summary>
-        public T ValueOrDefault => _hasValue ? _value : default(T);
+        public T ValueOrDefault => HasValue ? _value : default(T);
 
         /// <summary>
         /// Gets the value of the option if present,
@@ -84,7 +77,7 @@ namespace Functional.Option
         /// <returns>The Option's value or val</returns>
         public T ValueOr(T val)
         {
-            return _hasValue ? _value : val;
+            return HasValue ? _value : val;
         }
 
         /// <summary>
@@ -95,7 +88,7 @@ namespace Functional.Option
         /// <returns>The Option's value or val()</returns>
         public T ValueOr(Func<T> val)
         {
-            return _hasValue ? _value : val();
+            return HasValue ? _value : val();
         }
 
         /// <summary>
@@ -115,7 +108,7 @@ namespace Functional.Option
 
         internal Option(T value)
         {
-            this._hasValue = true;
+            this.HasValue = true;
             this._value = value;
         }
 
@@ -145,7 +138,7 @@ namespace Functional.Option
         /// </param>
         public void Match(Action None = null, Action<T> Some = null)
         {
-            if (!_hasValue)
+            if (!HasValue)
             {
                 None?.Invoke();
             }
@@ -167,7 +160,7 @@ namespace Functional.Option
         /// </param>
         public TOut Match<TOut>(Func<TOut> None, Func<T, TOut> Some)
         {
-            return !_hasValue ? None() : Some(_value);
+            return !HasValue ? None() : Some(_value);
         }
 
         /// <summary>
@@ -281,7 +274,7 @@ namespace Functional.Option
         /// </returns>
         public T[] ToArray()
         {
-            return _hasValue ? new[] { _value } : EmptyArray<T>.Array;
+            return HasValue ? new[] { _value } : EmptyArray<T>.Array;
         }
 
         /// <summary>
@@ -294,7 +287,7 @@ namespace Functional.Option
         /// </param>
         public void ForEach(Action<T> action)
         {
-            if (_hasValue) action(_value);
+            if (HasValue) action(_value);
         }
 
         
@@ -315,7 +308,7 @@ namespace Functional.Option
         /// </returns>
         public Option<TResult> Select<TResult>(Func<T, TResult> selector)
         {
-            if(_hasValue)
+            if(HasValue)
             {
                 return selector(_value);
             }
@@ -345,7 +338,7 @@ namespace Functional.Option
 
             //return this.Select<TResult>(val => selector(val, 0));
 
-            return _hasValue ? (Option<TResult>) selector(_value, 0) : Option.None;
+            return HasValue ? (Option<TResult>) selector(_value, 0) : Option.None;
         }
 
         /// <summary>
@@ -363,7 +356,7 @@ namespace Functional.Option
         /// </returns>
         public Option<TResult> SelectMany<TResult>(Func<T, Option<TResult>> selector)
         {
-            return _hasValue ? selector(_value) : Option.None;
+            return HasValue ? selector(_value) : Option.None;
         }
 
         /// <summary>
@@ -381,7 +374,7 @@ namespace Functional.Option
         /// </returns>
         public Option<TResult> SelectMany<TResult>(Func<T, int, Option<TResult>> selector)
         {
-            return _hasValue ? selector(_value, 0) : Option.None;
+            return HasValue ? selector(_value, 0) : Option.None;
         }
 
         /// <summary>
@@ -397,7 +390,7 @@ namespace Functional.Option
         /// </returns>
         public Option<T> Where(Func<T, bool> predicate)
         {
-            if (_hasValue && predicate(this._value))
+            if (HasValue && predicate(this._value))
             {
                 return this;
             }
@@ -424,7 +417,7 @@ namespace Functional.Option
 
             //return this.Where(val => predicate(val, 0));
 
-            if (_hasValue && predicate(_value, 0))
+            if (HasValue && predicate(_value, 0))
             {
                 return this;
             }
@@ -489,7 +482,7 @@ namespace Functional.Option
         /// </returns>
         public IEnumerator<T> GetEnumerator()
         {
-            if (_hasValue)
+            if (HasValue)
             {
                 yield return _value;
             }
@@ -529,7 +522,7 @@ namespace Functional.Option
         /// </returns>
         public override int GetHashCode()
         {
-            return !_hasValue ? 0 : EqualityComparer<T>.Default.GetHashCode(_value);
+            return !HasValue ? 0 : EqualityComparer<T>.Default.GetHashCode(_value);
         }
 
         #endregion
@@ -591,7 +584,7 @@ namespace Functional.Option
         {
             if (null == value)
             {
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
             }
 
             return Option<T>.Some(value);
@@ -610,7 +603,7 @@ namespace Functional.Option
         {
             if (!value.HasValue)
             {
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
             }
 
             return Option<T>.Some(value.Value);
