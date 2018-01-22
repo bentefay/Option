@@ -6,9 +6,12 @@ What is it?
 
 A fork of the fantastic [Option](https://github.com/tejacques/Option) library, upgraded to netstandard.
 
-An Option type for C#. Options are a well studied Functional paradigm that allows for the representation of not having a value (None) as well as having a value (Some). This allows for a clear differentiation between the two without the need for null values.
+An Option type for C#. It allows you to clearly distinguish between having a value (`Some`) and not having a value (`None`) without using null. 
+This can make your APIs much more intuitive by flagging whether clients need to handle an empty result.
+It also provides a set of powerful operations to simplify interaction with optional values, which can be more flexible than using the `Try` pattern. 
 
-Unlike [Optional](https://github.com/nlkl/Optional), this library enforces that Option _cannot_ contain `null`, and so it can support unambigious implicit casts from `T` to `Option<T>`.
+Unlike [Optional](https://github.com/nlkl/Optional), this library enforces that Option _cannot_ contain `null`, and `null` converts to `Option.None`.
+As a result, this library supports unambigious implicit casts from `T`, `null` and `Option.None` to `Option<T>`.
 
 How can I get it?
 -----------------
