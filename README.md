@@ -5,8 +5,8 @@ What is it?
 -----------
 
 An Option type for C#. It allows you to clearly distinguish between having a value (`Some`) and not having a value (`None`) without using null. 
-This can make your APIs much more intuitive by flagging whether clients need to handle an empty result.
-It also provides a set of powerful operations to simplify interaction with optional values, which can be more flexible than using the `Try` pattern. 
+This can make your code clearer by flagging whether clients need to handle an empty result.
+The type also provides a set of powerful operations, providing more flexiblity than using the `Try` pattern. 
 
 Unlike [Optional](https://github.com/nlkl/Optional), this library enforces that Option _cannot_ contain `null`, and `null` converts to `Option.None`.
 As a result, this library supports unambigious implicit casts from `T`, `null` and `Option.None` to `Option<T>`.
@@ -23,14 +23,16 @@ Example Usage
 
 ### Create an option with a value ###
 ```csharp
+// These are all equivalent
 var option = Option.Create(1);
 var option = Option.Some(1);
 var option = Option<int>.Some(1);
-Option<int> option = 1;
+Option<int> option = 1; // Implicit cast from 1 to Option.Some(1)
 ```
 
 ### Create an empty option ###
 ```csharp
+// These are all equivalent
 int? x = null;
 var option = Option.Create(x);
 var option = Option<int>.None;
