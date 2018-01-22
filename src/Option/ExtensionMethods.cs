@@ -32,7 +32,7 @@ namespace Functional.Option
         /// Option&lt;T&gt;.None if value is null, otherwise an
         /// Option&lt;T&gt; whose value is set to <paramref name="value"/>.
         /// </returns>
-        public static Option<T> ToOption<T>(this Nullable<T> value)
+        public static Option<T> ToOption<T>(this T? value)
             where T: struct
         {
             return Option.Create(value);
@@ -48,8 +48,7 @@ namespace Functional.Option
         /// A sequence of T elements where the value of the Option&lt;T&gt;
         /// was Some&lt;T&gt;.
         /// </returns>
-        public static IEnumerable<T> Flatten<T>(
-            this IEnumerable<Option<T>> source)
+        public static IEnumerable<T> Flatten<T>(this IEnumerable<Option<T>> source)
         {
             foreach (var option in source)
             {
