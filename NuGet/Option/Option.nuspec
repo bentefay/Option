@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>Option</id>
-    <version>3.0.1</version>
-    <title>Option</title>
+    <id>Option.Netstandard</id>
+    <version>3.0.2</version>
+    <title>Option.Netstandard</title>
     <authors>Tom Jacques</authors>
     <owners>Tom Jacques</owners>
     <licenseUrl>https://github.com/tejacques/Option/blob/master/LICENSE</licenseUrl>
@@ -11,14 +11,18 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
         Binaries for the Option type.
-        Visit https://github.com/tejacques/Option for an overview and usage examples.
+        Forked from https://github.com/tejacques/Option.
+        Visit https://github.com/bentefay/Option for an overview and usage examples.
     </description>
     <summary>
-        An open source Option type for C#.
+        An Option type for C# (retargeted for netstandard).
     </summary>
     <releaseNotes>
         Version Release Notes:
 
+        Version 3.0.2:
+         - Fix target to netstandard1.0
+        
         Version 3.0.1:
          - Fix target to .NET 3.5
 
