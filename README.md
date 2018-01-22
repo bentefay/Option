@@ -60,7 +60,7 @@ Option.Some(1) == Option.Some(1)  // => True
 Option.Some(1) == Option.Some(2)  // => False
 Option.Some(1) == null  // => False
 Option.Some(1) == Option.None  // => False
-Option.Empty == null  // => true
+Option.None == null  // => true
 ```
 
 ### Access the option imperatively ###
